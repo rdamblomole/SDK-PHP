@@ -1,13 +1,13 @@
 <?php 
 namespace TodoPago;
 
-define('TODOPAGO_VERSION','1.1.0');
-define('TODOPAGO_ENDPOINT_TEST','https://developers.todopago.com.ar/services/t/1.1/');
-define('TODOPAGO_ENDPOINT_PROD','https://apis.todopago.com.ar/services/t/1.1/');
+define('TODOPAGO_VERSION','1.1.1');
+define('TODOPAGO_ENDPOINT_TEST','https://developers.todopago.com.ar/');
+define('TODOPAGO_ENDPOINT_PROD','https://apis.todopago.com.ar/');
+define('TODOPAGO_ENDPOINT_TENATN', 't/1.1/');
+define('TODOPAGO_ENDPOINT_SOAP_APPEND', 'services/');
 
 define('TODOPAGO_WSDL_AUTHORIZE',dirname(__FILE__).'/Authorize.wsdl');
-define('TODOPAGO_WSDL_OPERATIONS',dirname(__FILE__).'/Operations.wsdl');
-define('TODOPAGO_WSDL_PAYMENTMETHODS',dirname(__FILE__).'/PaymentMethods.wsdl');
 
 class Sdk
 {
@@ -17,10 +17,10 @@ class Sdk
 	private $pass = NULL;
 	private $connection_timeout = NULL;
 	private $local_cert = NULL;
-	private $end_point = TODOPAGO_ENDPOINT_TEST;
+	private $end_point = NULL;
 	
 	public function __construct($header_http_array, $mode = "test"){
-		$this->wsdl = array("Authorize" => TODOPAGO_WSDL_AUTHORIZE, "Operations" => TODOPAGO_WSDL_OPERATIONS, "PaymentMethods" => TODOPAGO_WSDL_PAYMENTMETHODS);
+		$this->wsdl = array("Authorize" => TODOPAGO_WSDL_AUTHORIZE);
 		
 		if($mode == "test") {
 			$this->end_point = TODOPAGO_ENDPOINT_TEST;
@@ -99,7 +99,7 @@ class Sdk
 
 	private function getClientSoap($typo){
 		$local_wsdl = $this->wsdl["$typo"];
-		$local_end_point = $this->end_point."$typo";
+		$local_end_point = $this->end_point.TODOPAGO_ENDPOINT_SOAP_APPEND.TODOPAGO_ENDPOINT_TENATN."$typo";
 		$context = array('http' =>
 			array(
 				'header'  => $this->header_http
@@ -144,7 +144,7 @@ class Sdk
             	$subst = "";
             	$string = preg_replace($re, $subst, $string);
 
-            	$replace = array("!","'","\'","\"","  ","$","#","\\","\n","\r",'\n','\r','\t',"\t","\n\r",'\n\r','&nbsp;','&ntilde;',".,",",.");
+            	$replace = array("!","'","\'","\"","  ","$","\\","\n","\r",'\n','\r','\t',"\t","\n\r",'\n\r','&nbsp;','&ntilde;',".,",",.");
             	$string = str_replace($replace, '', $string);
 
             	$cods = array('\u00c1','\u00e1','\u00c9','\u00e9','\u00cd','\u00ed','\u00d3','\u00f3','\u00da','\u00fa','\u00dc','\u00fc','\u00d1','\u00f1');
@@ -161,7 +161,10 @@ class Sdk
 			$xmlPayload .= "<" . $key . ">" . self::sanitizeValue($value) . "</" . $key . ">";
 		}
 		$xmlPayload .= "</Request>";
-		return $xmlPayload;
+
+		//Paso a UTF-8.
+		if(function_exists("mb_convert_encoding")) return mb_convert_encoding($xmlPayload, "UTF-8", "auto");    
+        else return utf8_encode($xmlPayload);
 	}
 
 	/*
@@ -197,23 +200,22 @@ class Sdk
 		return $authorizeAnswerResponseOptions;
 	}
 	
-	public function getAllPaymentMethods($merchant){
-		$clientSoap = $this->getClientSoap('PaymentMethods');
-		
-		$get_all_data = (object) $merchant;
-		
-		$getAll = $clientSoap->Get($get_all_data);
-		return json_decode(json_encode($getAll), TRUE);
+	//REST
+	public function getStatus($arr_datos_status){
+		$url = $this->end_point.TODOPAGO_ENDPOINT_TENATN.'api/Operations/GetByOperationId/MERCHANT/'. $arr_datos_status["MERCHANT"] . '/OPERATIONID/'. $arr_datos_status["OPERATIONID"];
+		return $this->doRest($url);
 	}
-
-	public function getStatus($arr_datos_status){//TODO: crear una funcion en algun lado que la use.
-		$clientSoap = $this->getClientSoap('Operations');
-		
-		$obj_datos_to_status = (object) $arr_datos_status;
-		
-		$get_status = $clientSoap->GetByOperationId($obj_datos_to_status);
-		
-		return json_decode(json_encode($get_status), TRUE);
+	public function getAllPaymentMethods($arr_datos_merchant){
+		$url = $this->end_point.TODOPAGO_ENDPOINT_TENATN.'api/PaymentMethods/Get/MERCHANT/'. $arr_datos_merchant["MERCHANT"];
+		return $this->doRest($url);
 	}
 	
+	private function doRest($url){
+		$curl = curl_init($url);
+		curl_setopt($curl, CURLOPT_RETURNTRANSFER, 1);
+		curl_setopt($curl, CURLOPT_SSL_VERIFYPEER, false);
+		$result = curl_exec($curl);
+		curl_close($curl);
+		return json_decode(json_encode(simplexml_load_string($result)), true);
+	}
 }
