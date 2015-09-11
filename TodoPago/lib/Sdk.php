@@ -1,7 +1,9 @@
 <?php 
 namespace TodoPago;
 
-define('TODOPAGO_VERSION','1.1.1');
+require_once(dirname(__FILE__)."/Client.php");
+
+define('TODOPAGO_VERSION','1.2.0');
 define('TODOPAGO_ENDPOINT_TEST','https://developers.todopago.com.ar/');
 define('TODOPAGO_ENDPOINT_PROD','https://apis.todopago.com.ar/');
 define('TODOPAGO_ENDPOINT_TENATN', 't/1.1/');
@@ -35,7 +37,7 @@ class Sdk
 	private function getHeaderHttp($header_http_array){
 		$header = "";
 		foreach($header_http_array as $key=>$value){
-			$header .= "$key : $value\r\n";
+			$header .= "$key: $value\r\n";
 		}
 		
 		return $header;
@@ -103,12 +105,26 @@ class Sdk
 		$context = array('http' =>
 			array(
 				'header'  => $this->header_http
-							
 			)
 		);
-         
+
+		// Fix bug #49853 - https://bugs.php.net/bug.php?id=49853
+		if(version_compare(PHP_VERSION, '5.3.8') == -1) {
+			$clientSoap = new Client($local_wsdl, array(
+					'local_cert'=>($this->local_cert), 
+					'connection_timeout' => $this->connection_timeout,
+					'location' => $local_end_point,
+					'encoding' => 'UTF-8',
+					'proxy_host' => $this->host,
+					'proxy_port' => $this->port,
+					'proxy_login' => $this->user,
+					'proxy_password' => $this->pass
+				));
+			$clientSoap->setCustomHeaders($context);
+			return $clientSoap;
+		}
+		
 		$clientSoap = new \SoapClient($local_wsdl, array(
-				
 				'stream_context' => stream_context_create($context),
 				'local_cert'=>($this->local_cert), 
 				'connection_timeout' => $this->connection_timeout,
@@ -138,20 +154,15 @@ class Sdk
 	}
 	
 	public static function sanitizeValue($string){
-            	$string = htmlspecialchars_decode($string);
-
-            	$re = "/\\[(.*?)\\]|<(.*?)\\>/i";
-            	$subst = "";
-            	$string = preg_replace($re, $subst, $string);
-
-            	$replace = array("!","'","\'","\"","  ","$","\\","\n","\r",'\n','\r','\t',"\t","\n\r",'\n\r','&nbsp;','&ntilde;',".,",",.");
-            	$string = str_replace($replace, '', $string);
-
-            	$cods = array('\u00c1','\u00e1','\u00c9','\u00e9','\u00cd','\u00ed','\u00d3','\u00f3','\u00da','\u00fa','\u00dc','\u00fc','\u00d1','\u00f1');
-            	$susts = array('Á','á','É','é','Í','í','Ó','ó','Ú','ú','Ü','ü','Ṅ','ñ');
-            	$string = str_replace($cods, $susts, $string);		
-            
-		return $string;
+		$string = htmlspecialchars_decode($string);
+		$string = strip_tags($string);
+		$re = "/\\[(.*?)\\]|<(.*?)\\>/i"; 
+		$subst = "";
+		$string = preg_replace($re, $subst, $string);
+		$string = preg_replace('/[\x00-\x1f]/','',$string);
+		$replace = array("\n","\r",'\n','\r','&nbsp;','&','<','>');
+		$string = str_replace($replace, '', $string);
+		return $string;	
 	}
 	
 	private function getPayload($optionsAuthorize){

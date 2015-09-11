@@ -20,6 +20,13 @@ Modulo para conexión con gateway de pago Todo Pago
 Se debe descargar la última versión del SDK desde el botón Download ZIP, branch master.		
 Una vez descargado y descomprimido, debe incluirse el archivo Sdk.php que se encuentra en la carpeta /TodoPago/lib como librería dentro del proyecto.		
 <br />		
+
+También se puede realizar la instalación a través de Composer.<br/>
+```composer require todopago/php-sdk```<br/>
+E incluir el archivo vendor/autoload.php en el proyecto.<br/>
+<br/>
+Observación: Descomentar: extension=php_soap.dll y extension=php_openssl.dll del php.ini, ya que para la conexión al gateway se utiliza la clase SoapClient del API de PHP. 
+
 [<sub>Volver a inicio</sub>](#inicio)		
 
 <a name="Versionesdephpsoportadas"></a>		
