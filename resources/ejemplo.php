@@ -5,20 +5,20 @@ use TodoPago\Sdk;
 	
 //común a todas los métodos
 
-$http_header = array('Authorization'=>'PRISMA f3d8b72c94ab4a06be2ef7c95490f7d3',
+$http_header = array('Authorization'=>'TODOPAGO 0129b065cfb744718166913eba827a2f',
  'user_agent' => 'PHPSoapClient');
  	
 //opciones para el método sendAuthorizeRequest
 $optionsSAR_comercio = array (
-	'Security'=>'1234567890ABCDEF1234567890ABCDEF',
+	'Security'=>'0129b065cfb744718166913eba827a2f',
 	'EncodingMethod'=>'XML',
-	'Merchant'=>2153,
-	'URL_OK'=>'localhost:8888/sdk-php/ejemplo/success.php',
-	'URL_ERROR'=>'localhost:8888/sdk-php/ejemplo/fail.php'
+	'Merchant'=>35,
+	'URL_OK'=>"http://".$_SERVER['SERVER_NAME'].":".$_SERVER['SERVER_PORT'].str_replace ($_SERVER['DOCUMENT_ROOT'], '', dirname($_SERVER['SCRIPT_FILENAME']))."/exito.php?operationid=$operationid",
+	'URL_ERROR'=>"http://".$_SERVER['SERVER_NAME'].":".$_SERVER['SERVER_PORT'].str_replace ($_SERVER['DOCUMENT_ROOT'], '', dirname($_SERVER['SCRIPT_FILENAME']))."/error.php?operationid=$operationid"
 );
 
 $optionsSAR_operacion = array (
-	'MERCHANT'=> "2153",
+	'MERCHANT'=> "35",
 	'OPERATIONID'=>"50",
 	'CURRENCYCODE'=> 032,
 	'AMOUNT'=>"54",
@@ -75,17 +75,17 @@ $optionsSAR_operacion = array (
  	
 //opciones para el método getAuthorizeAnswer
 $optionsGAA = array(	
-	'Security' => '1234567890ABCDEF1234567890ABCDEF', 
+	'Security' => '0129b065cfb744718166913eba827a2f', 
 	'Merchant' => "2153",
 	'RequestKey' => '710268a7-7688-c8bf-68c9-430107e6b9da',
 	'AnswerKey' => '693ca9cc-c940-06a4-8d96-1ab0d66f3ee6'
 	);
 	
 //opciones para el método getAllPaymentMethods
-$optionsGAMP = array("MERCHANT"=>2153);
+$optionsGAMP = array("MERCHANT"=>35);
 	
 //opciones para el método getStatus 
-$optionsGS = array('MERCHANT'=>'2153', 'OPERATIONID'=>'02');
+$optionsGS = array('MERCHANT'=>'35', 'OPERATIONID'=>'02');
 	
 //creo instancia de la clase TodoPago
 $connector = new Sdk($http_header, "test");
