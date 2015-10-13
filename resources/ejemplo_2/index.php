@@ -5,12 +5,10 @@ use TodoPago\Sdk;
 include_once '../../vendor/autoload.php';
 
 //común a todas los métodos
-$wsdl['Authorize'] = "https://50.19.97.101:8243/services/Authorize?wsdl";
-$wsdl['PaymentMethods'] = "https://50.19.97.101:8243/services/PaymentMethods?wsdl";
-$wsdl['Operations'] = "https://50.19.97.101:8243/services/Operations?wsdl";
 $http_header = array('Authorization'=>'TODOPAGO 0129b065cfb744718166913eba827a2f',
  'user_agent' => 'PHPSoapClient');
-define('END_POINT', "https://50.19.97.101:8243/services/");
+
+$operationid = rand(1,100000000)
 
 //opciones para el método sendAuthorizeRequest
 $optionsSAR_comercio = array (

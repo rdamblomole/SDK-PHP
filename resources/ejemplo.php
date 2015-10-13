@@ -4,10 +4,11 @@ include_once dirname(__FILE__)."/../TodoPago/lib/Sdk.php";
 use TodoPago\Sdk;
 	
 //común a todas los métodos
-
 $http_header = array('Authorization'=>'TODOPAGO 0129b065cfb744718166913eba827a2f',
  'user_agent' => 'PHPSoapClient');
  	
+$operationid = rand(1,10000000);
+
 //opciones para el método sendAuthorizeRequest
 $optionsSAR_comercio = array (
 	'Security'=>'0129b065cfb744718166913eba827a2f',
