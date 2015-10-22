@@ -3,7 +3,7 @@ namespace TodoPago;
 
 require_once(dirname(__FILE__)."/Client.php");
 
-define('TODOPAGO_VERSION','1.2.2');
+define('TODOPAGO_VERSION','1.2.3');
 define('TODOPAGO_ENDPOINT_TEST','https://developers.todopago.com.ar/');
 define('TODOPAGO_ENDPOINT_PROD','https://apis.todopago.com.ar/');
 define('TODOPAGO_ENDPOINT_TENATN', 't/1.1/');
@@ -216,6 +216,7 @@ class Sdk
 		$url = $this->end_point.TODOPAGO_ENDPOINT_TENATN.'api/Operations/GetByOperationId/MERCHANT/'. $arr_datos_status["MERCHANT"] . '/OPERATIONID/'. $arr_datos_status["OPERATIONID"];
 		return $this->doRest($url);
 	}
+	
 	public function getAllPaymentMethods($arr_datos_merchant){
 		$url = $this->end_point.TODOPAGO_ENDPOINT_TENATN.'api/PaymentMethods/Get/MERCHANT/'. $arr_datos_merchant["MERCHANT"];
 		return $this->doRest($url);
@@ -224,9 +225,18 @@ class Sdk
 	private function doRest($url){
 		$curl = curl_init($url);
 		curl_setopt($curl, CURLOPT_RETURNTRANSFER, 1);
-		curl_setopt($curl, CURLOPT_SSL_VERIFYPEER, false);
+		curl_setopt($curl, CURLOPT_SSL_VERIFYPEER, false);	
+		if($this->host != null)
+			curl_setopt($curl, CURLOPT_PROXY, $this->host);
+		if($this->port != null)
+			curl_setopt($curl, CURLOPT_PROXYPORT, $this->port);
 		$result = curl_exec($curl);
+		$http_status = curl_getinfo($curl, CURLINFO_HTTP_CODE);
 		curl_close($curl);
+		if($http_status != 200) {
+			$result = "<Colections/>";
+		}
+
 		return json_decode(json_encode(simplexml_load_string($result)), true);
 	}
 }
