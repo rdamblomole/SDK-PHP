@@ -3,7 +3,7 @@ namespace TodoPago;
 
 require_once(dirname(__FILE__)."/Client.php");
 
-define('TODOPAGO_VERSION','1.3.1');
+define('TODOPAGO_VERSION','1.3.2');
 define('TODOPAGO_ENDPOINT_TEST','https://developers.todopago.com.ar/');
 define('TODOPAGO_ENDPOINT_PROD','https://apis.todopago.com.ar/');
 define('TODOPAGO_ENDPOINT_TENATN', 't/1.1/');
@@ -180,10 +180,10 @@ class Sdk
  		unset($optionsAuthorize['SDK']);
  		unset($optionsAuthorize['SDKVERSION']);
  		unset($optionsAuthorize['LENGUAGEVERSION']);
- 		$optionsAuthorize['SDK'] = "PHP";
- 		$optionsAuthorize['SDKVERSION'] = TODOPAGO_VERSION;
- 		$optionsAuthorize['LENGUAGEVERSION'] = PHP_VERSION;
-		
+		unset($optionsAuthorize['PLUGINVERSION']);
+		unset($optionsAuthorize['ECOMMERCENAME']);
+		unset($optionsAuthorize['ECOMMERCEVERSION']);
+		unset($optionsAuthorize['CMSVERSION']);
 		foreach($optionsAuthorize as $key => $value){
 			if(strpos($value,"#") === false) {
 				$value = substr($value, 0, 254);
