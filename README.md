@@ -15,7 +15,7 @@ Todo Pago - módulo SDK-PHP para conexión con gateway de pago
  + [Características](#caracteristicas)
     + [Status de la operación](#status)
     + [Consulta de operaciones por rango de tiempo](#statusdate)
-    + [Devolucion](#devolucion)
+    + [Devolución](#devolucion)
     + [Devolucion parcial](#devolucionparcial)
     + [Formulario hibrido](#formhidrido)
     + [Obtener Credenciales](#credenciales)
