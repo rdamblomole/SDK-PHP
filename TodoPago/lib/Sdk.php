@@ -4,7 +4,7 @@ namespace TodoPago;
 require_once(dirname(__FILE__)."/Client.php");
 require_once(dirname(__FILE__)."/Utils/FraudControlValidator.php");
 
-define('TODOPAGO_VERSION','1.5.1');
+define('TODOPAGO_VERSION','1.6.0');
 define('TODOPAGO_ENDPOINT_TEST','https://developers.todopago.com.ar/');
 define('TODOPAGO_ENDPOINT_PROD','https://apis.todopago.com.ar/');
 define('TODOPAGO_ENDPOINT_TENATN', 't/1.1/');
@@ -91,10 +91,6 @@ class Sdk
 	public function sendAuthorizeRequest($options_comercio, $options_operacion){
 		// parseo de los valores enviados por el e-commerce/custompage
 		$authorizeRequest = $this->parseToAuthorizeRequest($options_comercio, $options_operacion);
-		
-		if(is_object($authorizeRequest->Payload)) {
-			return $this->parseAuthorizeRequestResponseToArray($authorizeRequest->Payload);
-		}
 		
 		$authorizeRequestResponse = $this->getAuthorizeRequestResponse($authorizeRequest);
 
@@ -195,16 +191,6 @@ class Sdk
 		unset($optionsAuthorize['ECOMMERCENAME']);
 		unset($optionsAuthorize['ECOMMERCEVERSION']);
 		unset($optionsAuthorize['CMSVERSION']);
-
-		try {
-			$validator = new \TodoPago\Utils\FraudControlValidator($optionsAuthorize);
-			$optionsAuthorize = $validator->execute();			
-		} catch (\Exception $e) {
-			$res = new \StdClass();
-			$res->StatusCode = 99977;
-			$res->StatusMessage = $e->getMessage();
-			return $res;
-		}
 
 		foreach($optionsAuthorize as $key => $value){
 			$xmlPayload .= "<" . $key . ">" . $value . "</" . $key . ">";
