@@ -162,7 +162,8 @@ array(
           'MERCHANT'               => '12345678',		
           'OPERATIONID'            => 'ABCDEF-1234-12221-FDE1-00000012',		
           'AMOUNT'                 => '1.00',		
-          'CURRENCYCODE'           => '032', 		
+          'CURRENCYCODE'           => '032', 
+          'AMOUNTBUYER'            => '1.10', // Monto final pagado por el usuario
           );		
 ```		
 Este método devuelve el resumen de los datos de la transacción.		
