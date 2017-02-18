@@ -57,21 +57,6 @@ class Sdk
 		return $endpoint;
 	}
 
-	public function getEndpointForm($mode = null) {
-		if($mode == "test") {
-			$endpoint = TODOPAGO_ENDPOINT_TEST_FORM;
-		} else if($mode == "prod") {
-			$endpoint = TODOPAGO_ENDPOINT_PROD_FORM;
-		} else {
-			if($this->end_point == TODOPAGO_ENDPOINT_PROD) {
-				$endpoint = TODOPAGO_ENDPOINT_PROD_FORM;
-			} else {
-				$endpoint = TODOPAGO_ENDPOINT_TEST_FORM;
-			}
-		}
-		return $endpoint;
- 	}
-
 	private function getHeaderHttp($header_http_array){
 		$header = "";
 		if(is_array($header_http_array)) {
