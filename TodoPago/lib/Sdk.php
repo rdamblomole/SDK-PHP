@@ -4,7 +4,7 @@ namespace TodoPago;
 require_once(dirname(__FILE__)."/Client.php");
 require_once(dirname(__FILE__)."/Utils/FraudControlValidator.php");
 
-define('TODOPAGO_VERSION','1.8.2');
+define('TODOPAGO_VERSION','1.8.4');
 define('TODOPAGO_ENDPOINT_TEST','https://developers.todopago.com.ar/');
 define('TODOPAGO_ENDPOINT_PROD','https://apis.todopago.com.ar/');
 define('TODOPAGO_ENDPOINT_TENATN', 't/1.1/');
@@ -127,9 +127,6 @@ class Sdk
 	private function getClientSoap($typo, $type = "native"){
 		$local_wsdl = $this->wsdl["$typo"];
 		$local_end_point = $this->end_point.TODOPAGO_ENDPOINT_SOAP_APPEND.TODOPAGO_ENDPOINT_TENATN."$typo";
-		if(($typo == "EchoServiceDSS")||($typo == "EchoServiceESB")) {
-			$local_end_point = $this->end_point.TODOPAGO_ENDPOINT_SOAP_APPEND."$typo";
-		}
 
 		$context = array(
 			'http' => array(
@@ -196,32 +193,31 @@ class Sdk
 
 		return $authorizeRequestResponseOptions;
 	}
-	
+
 	public static function sanitizeValue($string){
 		$string = htmlspecialchars_decode($string);
 		$string = strip_tags($string);
-		$re = "/\\[(.*?)\\]|<(.*?)\\>/i"; 
+		$re = "/\\[(.*?)\\]|<(.*?)\\>/i";
 		$subst = "";
 		$string = preg_replace($re, $subst, $string);
 		$string = preg_replace('/[\x00-\x1f]/','',$string);
 		$string = preg_replace('/[\xc2-\xdf][\x80-\xbf]/','',$string);
 		$replace = array("\n","\r",'\n','\r','&nbsp;','&','<','>');
 		$string = str_replace($replace, '', $string);
-		return $string;	
+		return $string;
 	}
-	
+
 	private function getPayload($optionsAuthorize){
 		$xmlPayload = "<Request>";
  		unset($optionsAuthorize['SDK']);
  		unset($optionsAuthorize['SDKVERSION']);
  		unset($optionsAuthorize['LENGUAGEVERSION']);
-		unset($optionsAuthorize['PLUGINVERSION']);
-		unset($optionsAuthorize['ECOMMERCENAME']);
-		unset($optionsAuthorize['ECOMMERCEVERSION']);
-		unset($optionsAuthorize['CMSVERSION']);
+ 		$optionsAuthorize['SDK'] = "PHP";
+ 		$optionsAuthorize['SDKVERSION'] = TODOPAGO_VERSION;
+ 		$optionsAuthorize['LENGUAGEVERSION'] = PHP_VERSION;
 
 		foreach($optionsAuthorize as $key => $value){
-			$xmlPayload .= "<" . $key . ">" . $value . "</" . $key . ">";
+			$xmlPayload .= "<" . $key . ">" . self::sanitizeValue($value) . "</" . $key . ">";
 		}
 		$xmlPayload .= "</Request>";
 
@@ -352,25 +348,29 @@ class Sdk
 
 		return $returnRequestResponseValues;
 	}
-	
-	
+
 	//REST
+	public function discoverPaymentMethods(){
+		$url = $this->end_point.TODOPAGO_ENDPOINT_TENATN.'api/PaymentMethods/Discover';
+		return $this->doRest($url);
+	}
+
 	public function getStatus($arr_datos_status){
 		$url = $this->end_point.TODOPAGO_ENDPOINT_TENATN.'api/Operations/GetByOperationId/MERCHANT/'. $arr_datos_status["MERCHANT"] . '/OPERATIONID/'. $arr_datos_status["OPERATIONID"];
 		return $this->doRest($url);
 	}
-	
+
 	public function getAllPaymentMethods($arr_datos_merchant){
 		$url = $this->end_point.TODOPAGO_ENDPOINT_TENATN.'api/PaymentMethods/Get/MERCHANT/'. $arr_datos_merchant["MERCHANT"];
 		return $this->doRest($url);
 	}
-	
+
 	public function getByRangeDateTime($arr_datos) {
 		if(!isset($arr_datos['PAGENUMBER'])) $arr_datos['PAGENUMBER'] = 1;
 		$url = $this->end_point.TODOPAGO_ENDPOINT_TENATN.'api/Operations/GetByRangeDateTime/MERCHANT/'. $arr_datos["MERCHANT"] . '/STARTDATE/' . $arr_datos["STARTDATE"] . '/ENDDATE/' . $arr_datos["ENDDATE"] . '/PAGENUMBER/' . $arr_datos["PAGENUMBER"];
 		return $this->doRest($url);
 	}
-	
+
 	public function getCredentials(Data\User $user) {
 		$url = $this->end_point.'api/Credentials';
 		$data = $user->getData();
@@ -386,10 +386,10 @@ class Sdk
 
 		$user->setMerchant($response["Credentials"]["merchantId"]);
 		$user->setApikey($response["Credentials"]["APIKey"]);
-		
+
 		return $user;
 	}
-	
+
 	private function doRest($url, $data = array(), $method = "GET", $headers = array(), $retry = false){
 		$curl = curl_init($url);
 		curl_setopt($curl, CURLOPT_RETURNTRANSFER, 1);
@@ -412,6 +412,7 @@ class Sdk
 		$result = curl_exec($curl);
 		$http_status = curl_getinfo($curl, CURLINFO_HTTP_CODE);
 		curl_close($curl);
+
 		if($http_status != 200) {
 			if($retry) {
 				$result = "<Colections/>";
@@ -421,7 +422,7 @@ class Sdk
 		}
 		if( json_decode($result) != null ) {
 			return json_decode($result,true);
-		} 
+		}
 		return json_decode(json_encode(simplexml_load_string($result)), true);
 	}
 }
