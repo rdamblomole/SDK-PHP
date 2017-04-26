@@ -4,7 +4,7 @@ namespace TodoPago;
 require_once(dirname(__FILE__)."/Client.php");
 require_once(dirname(__FILE__)."/Utils/FraudControlValidator.php");
 
-define('TODOPAGO_VERSION','1.8.4');
+define('TODOPAGO_VERSION','1.9.0');
 define('TODOPAGO_ENDPOINT_TEST','https://developers.todopago.com.ar/');
 define('TODOPAGO_ENDPOINT_PROD','https://apis.todopago.com.ar/');
 define('TODOPAGO_ENDPOINT_TENATN', 't/1.1/');
@@ -64,7 +64,7 @@ class Sdk
 				$header .= "$key: $value\r\n";
 			}
 
-		}		
+		}
 		return $header;
 	}
 	/*
@@ -82,7 +82,7 @@ class Sdk
 		$this->user = $user;
 		$this->pass = $pass;
 	}
-	
+
 	/**
 	* Setea time out (deaulft=NULL)
 	* ejemplo:
@@ -91,16 +91,15 @@ class Sdk
 	public function setConnectionTimeout($connection_timeout){
 		$this->connection_timeout = $connection_timeout;
 	}
-	
+
 	/**
 	* Setea ruta del certificado .pem (deaulft=NULL)
 	* ejemplo:
 	* $todopago->setLocalCert('c:/miscertificados/decidir.pem');
-	*/	
+	*/
 	public function setLocalCert($local_cert){
 		$this->local_cert= file_get_contents($local_cert);
 	}
-	
 
 	/*
 	* GET_PAYMENT_VALUES
@@ -109,7 +108,7 @@ class Sdk
 	public function sendAuthorizeRequest($options_comercio, $options_operacion){
 		// parseo de los valores enviados por el e-commerce/custompage
 		$authorizeRequest = $this->parseToAuthorizeRequest($options_comercio, $options_operacion);
-		
+
 		$authorizeRequestResponse = $this->getAuthorizeRequestResponse($authorizeRequest);
 
 		//devuelve el formato de array el resultado de de la operación SendAuthorizeRequest
@@ -174,7 +173,7 @@ class Sdk
 
 	private function getAuthorizeRequestResponse($authorizeRequest){
 		$clientSoap = $this->getClientSoap('Authorize');
-		
+
 		try {
 			$authorizeRequestResponse = $clientSoap->SendAuthorizeRequest($authorizeRequest);
 		} catch (\Exception $e) {
@@ -222,7 +221,7 @@ class Sdk
 		$xmlPayload .= "</Request>";
 
 		//Paso a UTF-8.
-		if(function_exists("mb_convert_encoding")) return mb_convert_encoding($xmlPayload, "UTF-8", "auto");    
+		if(function_exists("mb_convert_encoding")) return mb_convert_encoding($xmlPayload, "UTF-8", "auto");
         else return utf8_encode($xmlPayload);
 	}
 
@@ -357,7 +356,7 @@ class Sdk
 
 	public function getStatus($arr_datos_status){
 		$url = $this->end_point.TODOPAGO_ENDPOINT_TENATN.'api/Operations/GetByOperationId/MERCHANT/'. $arr_datos_status["MERCHANT"] . '/OPERATIONID/'. $arr_datos_status["OPERATIONID"];
-		return $this->doRest($url);
+		return $this->doRest($url, null, "GET", array("Accept" => "application/json"));
 	}
 
 	public function getAllPaymentMethods($arr_datos_merchant){
