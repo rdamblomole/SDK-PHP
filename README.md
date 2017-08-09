@@ -14,12 +14,14 @@ Todo Pago - módulo SDK-PHP para conexión con gateway de pago
       + [Datos adicionales para prevención de fraude](#datosadicionales)
       + [Opciones adicionales](#opcionesadicionales)
         + [Rango de cuotas](#coutas)
+        + [Filtrado de Medios de pago](#filtromp)
         + [Tiempo de vida de la transacción](#timeout)
       + [Confirmación de transacción](#confirmatransaccion)
       + [Ejemplo](#ejemplo)
       + [Características](#caracteristicas)
         + [Status de la operación](#status)
         + [Consulta de operaciones por rango de tiempo](#statusdate)
+        + [Descubrimiento de Medios de Pago](#discover)
         + [Devolución](#devolucion)
         + [Devolución parcial](#devolucionparcial)
         + [Formulario híbrido](#formhidrido)
@@ -101,7 +103,7 @@ Una vez adheridos se creará automáticamente una cuenta virtual, en la cual se 
 
 <a name="secuencia"></a>
 ## Diagrama de secuencia
-![imagen de configuracion](https://raw.githubusercontent.com/TodoPago/imagenes/master/README.img/secuencia-page-001.jpg)
+![imagen de configuracion](https://raw.githubusercontent.com/TodoPago/imagenes/master/README.img/secuencia-003.jpg)
 
 
 
@@ -230,7 +232,7 @@ __*__ _Importante:_ Tambíen deben mandarse los datos correspondientes a [Preven
 <table><tr>
 <td>Campo</td><td>Requerido</td><td>Descripción</td><td>Tipo de Dato</td><td>Valores posibles / Ejemplo</td></tr>
 <tr><td>**StatusCode**</td><td>Sí</td><td>Código de estado o valor de retorno del Servicio</td><td>Numérico de 5 posiciones</td><td> <ul><li>-1 -> OK</li><li>otro ->Error</li></ul></td></tr>
-<tr><td>**StatusMessage**</td><td>Sí</td><td>Descripción del códgo de retorno o estado del servicio</td><td>Alfanumérico hasta 256</td><td>-</td></tr>
+<tr><td>**StatusMessage**</td><td>Sí</td><td>Descripción del códgo de retorno o estado del servicio</td><td>Alfanumérico hasta 256</td><td>Ejemplo: Solicitud de Autorización Registrada</td></tr>
 <tr><td>**URL_Request**</td><td>Sí</td><td>Url del formulario de pago</td><td>URL</td><td>https://forms.todopago.com.ar/formulario/commands?command=formulario&m=t7d3938c9-f7b1-4ee9-e76b-9cc84f73fe81</td></tr>
 <tr><td>**RequestKey**</td><td>No</td><td>Identificador Privado del Requerimiento obtenido en la respuesta de la operación SendAuthorizeRequest. Nunca debe ser expuesto hacia el Web Browser. Solo será utilizado entre el ecommerce y TodoPago</td><td>Alfanumérico hasta 48 caracteres</td><td>8496472a-8c87-e35b-dcf2-94d5e31eb12f</td></tr>
 <tr><td>**PublicRequestKey**</td><td>No</td><td>Identificador Público del Requerimiento obenido en la respuesta de la operación SendAuthorizeRequest</td><td>Alfanumérico de hasta 48 caracteres</td><td>t7d3938c9-f7b1-4ee9-e76b-9cc84f73fe81</td></tr>
@@ -387,7 +389,7 @@ $12 -> 12.00</td>
     <td>No</td>
     <td>Cantidad de días que está registrado el cliente en el sitio del comercio.</td>
     <td>Alfanumérico de 255 caracteres.</td>
-    <td></td>
+    <td>Ejemplo: 178</td>
   </tr>
   <tr>
     <td><b>CSMDD8</b></td>
@@ -401,21 +403,21 @@ $12 -> 12.00</td>
     <td>No</td>
     <td>Valor del password del usuario registrado en el portal del comercio. Incluir el valor en hash</td>
     <td>Alfanumérico de 255 caracteres.</td>
-    <td></td>
+    <td>Ejemplo: "4ac1503de8c50a81213f2d5bac49628b"</td>
   </tr>
   <tr>
     <td><b>CSMDD10</b></td>
     <td>No</td>
     <td>Cantidad de transacciones realizadas por el mismo usuario registrado en el portal del comercio (Num transacciones)</td>
     <td>Alfanumérico de 255 caracteres.</td>
-    <td></td>
+    <td>Ejemplo: 5</td>
   </tr>
   <tr>
     <td><b>CSMDD11</b></td>
     <td>No</td>
     <td>Celular del cliente</td>
     <td>Alfanumérico de 255 caracteres.</td>
-    <td></td>
+    <td>Ejemplo: "1155001122"</td>
   </tr>
 </table>
 
@@ -433,7 +435,7 @@ $12 -> 12.00</td>
     <td>Si</td>
     <td>Ciudad de envío de la orden</td>
     <td>Alfanumérico de 50 caracteres</td>
-    <td></td>
+    <td>Ejemplo: "Capital Federal"</td>
   </tr>
   <tr>
     <td><b>CSSTCOUNTRY</b></td>
@@ -447,35 +449,35 @@ $12 -> 12.00</td>
     <td>Si</td>
     <td>Correo electrónico del comprador</td>
     <td>Alfanumérico de 100 caracteres</td>
-    <td></td>
+    <td>Ejemplo: "mail@empresa.com"</td>
   </tr>
   <tr>
     <td><b>CSSTFIRSTNAME</b></td>
     <td>Si</td>
     <td>Nombre de la persona que recibe el producto</td>
     <td>Alfanumérico de 60 caracteres</td>
-    <td></td>
+    <td>Ejemplo: "Juan"</td>
   </tr>
   <tr>
     <td><b>CSSTLASTNAME</b></td>
     <td>Si</td>
     <td>Apellido de la persona que recibe el producto</td>
     <td>Alfanumérico de 60 caracteres</td>
-    <td></td>
+    <td>Ejemplo: "Pérez"</td>
   </tr>
   <tr>
     <td><b>CSSTPHONENUMBER</b></td>
     <td>Si</td>
     <td>Número de teléfono del destinatario</td>
     <td>Alfanumérico de 15 caracteres</td>
-    <td></td>
+    <td>Ejemplo: "45004500"</td>
   </tr>
   <tr>
     <td><b>CSSTPOSTALCODE</b></td>
     <td>Si</td>
     <td>Código postal del domicilio de envío</td>
     <td>Alfanumérico de 10 caracteres</td>
-    <td></td>
+    <td>Ejemplos: "C1006DRW", "C1006" "1006"</td>
   </tr>
   <tr>
     <td><b>CSSTSTATE</b></td>
@@ -489,21 +491,21 @@ $12 -> 12.00</td>
     <td>Si</td>
     <td>Domicilio de envío</td>
     <td>Alfanumérico de 60 caracteres</td>
-    <td></td>
+    <td>Ejemplo: "Cerrito 740"</td>
   </tr>
   <tr>
     <td><b>CSSTSTREET2</b></td>
     <td>No</td>
-    <td>Localidad de envío</td>
+    <td>Datos adicionales del domicilio del envío</td>
     <td>Alfanumérico de 60 caracteres</td>
-    <td></td>
+    <td>Ejemplo: "Piso 7"</td>
   </tr>
   <tr>
     <td><b>CSMDD12</b></td>
     <td>No</td>
     <td>Cantidad de días que tiene el comercio para hacer la entrega</td>
     <td>Alfanumérico de 255 caracteres</td>
-    <td></td>
+    <td>Ejemplo: 10</td>
   </tr>
   <tr>
     <td><b>CSMDD13</b></td>
@@ -527,14 +529,14 @@ $12 -> 12.00</td>
     <td>No</td>
     <td>CustomerLoyalityNumber - número de cliente frecuente</td>
     <td>Alfanumérico de 255 caracteres</td>
-    <td></td>
+    <td>Ejemplo: "789875"</td>
   </tr>
   <tr>
     <td><b>CSMDD16</b></td>
     <td>No</td>
     <td>Promotional / CouponCode - número de cupón de descuento</td>
     <td>Alfanumérico de 255 caracteres</td>
-    <td></td>
+    <td>Ejemplo: "PROMO30"</td>
   </tr>
 </table>
 
@@ -688,6 +690,49 @@ Es posible setear el rango de cuotas a mostrar en el formulario entre un mínimo
   </tr>  
 </table>
 
+##### Ejemplo
+
+```php
+$optionsSAR_operacion = array (
+...................................
+	'MININSTALLMENTS'=>3,
+	'MAXINSTALLMENTS'=>6,
+...................................
+```
+
+<a name="filtromp"></a>
+##### Filtrado de Medios de Pago
+Mediante esta funcionalidad es posible filtrar los medios de pago habilitados en el formulario de pago. Se debe pasar en la llamada al servicio SendAuthorizeRequest un parámetro adicional con los ids de los medio de pago que se desean habilitar, los cuales pueden consultarse mediante el método de [Descubrimiento de Medios de Pago](#discover)
+
+<table>
+  <tr>
+    <th>Campo</th>
+    <th>Requerido</th>
+    <th>Descripción</th>
+    <th>Tipo de Dato</th>
+    <th>Valores posibles / Ejemplo</th>
+  </tr>
+  <tr>
+    <td><b>AVAILABLEPAYMENTMETHODSIDS</b></td>
+    <td>No</td>
+    <td>Lista de los ids de medios de pago habilitados separados por #</td>
+    <td>Alfanumérico</td>
+    <td>1#42#500</td>
+  </tr>
+</table>
+
+##### Ejemplo
+
+```php
+$optionsSAR_operacion = array (
+...................................
+	'AVAILABLEPAYMENTMETHODSIDS'=>"1#42#500",
+...................................
+```
+
+[<sub>Volver a inicio</sub>](#inicio)
+<br>
+
 <a name="timeout"></a>
 ##### Tiempo de vida de la transacción
 Es posible setear el tiempo máximo disponible para que el cliente complete el pago en el formulario, el valor por defecto es de 30 minutos. El rango posible es de 5 minutos a 6 horas. Los valores deben ser expresados en milisegundos
@@ -709,8 +754,17 @@ Es posible setear el tiempo máximo disponible para que el cliente complete el p
   </tr>
 </table>
 
+##### Ejemplo
+
+```php
+$optionsSAR_operacion = array (
+...................................
+	'TIMEOUT'=> 10*60*1000, // 10 minutos
+...................................
+```
+
 [<sub>Volver a inicio</sub>](#inicio)
-<br>
+
 <a name="confirmatransaccion"></a>
 #### Confirmación de transacción.
 En este caso hay que llamar a **getAuthorizeAnswer()**, enviando como parámetro un array como se describe a continuación.
@@ -774,8 +828,8 @@ El parámetro <strong>RequestKey</strong> es siempre distinto y debe ser persist
 <table>
 <tr><td>Campo</td><td>Requerido</td><td>Descripción</td><td>Tipo de Dato</td><td>Valores posibles / Ejemplo</td></tr>
 <tr><td>**StatusCode** </td><td>Si</td><td>Código de estado o valor de retorno del Servicio</td><td>Numèrico de 5 posiciones</td><td> <b>-1 -> OK<br> 0 a 99999 o vacío -> error</b></td></tr>
-<tr><td>**StatusMessage**</td><td>Si</td><td>Descripción del código de retorno o estado del servicio</td><td>Alfanumérico hasta 256</td><td>-</td></tr>
-<tr><td>**AuthorizationKey**</td><td>No</td><td>Identificador Privado de la Respuesta</td><td>Alfanumérico hasta 256 caracteres</td><td>-</td></tr>
+<tr><td>**StatusMessage**</td><td>Si</td><td>Descripción del código de retorno o estado del servicio</td><td>Alfanumérico hasta 256</td><td>Ejemplo: "APROBADA"</td></tr>
+<tr><td>**AuthorizationKey**</td><td>No</td><td>Identificador Privado de la Respuesta</td><td>Alfanumérico hasta 256 caracteres</td><td>Ejemplo: "9c2f0109-e585-0776-d3d0-f934ed50ccd4"</td></tr>
 <tr><td>**EncodingMethod**</td><td>No</td><td>Especifica el tipo codificación que se usa para los datos de la transacciones de pagos</td><td>Alfanumérico hasta 16 caracteres</td><td>XML</td></tr>
 <tr><td>**Payload**</td><td>No</td><td>Documento codificado  en el  formato especificado en el campo EncodingMethod  el cual contiene los datos de la transacción ejecutada</td><td>Alfanumérico hasta 2048 caracteres</td><td>-</td></tr></table>
 .
@@ -784,14 +838,14 @@ El campo o elemento Payload es utilizado para retornar los datos de la respuesta
 
 <table>
 <tr><td>Campo</td><td>Requerido</td><td>Descripción</td><td>Tipo de Dato</td><td>Valores posibles / Ejemplo</td></tr>
-<tr><td>**DATETIME**</td><td>Si</td><td>Fecha y Hora de la Transacción</td><td>Fecha y Hora. aaaammddTHHMMSSZ La hora se expresa en formato 24 hs.</td><td></td></tr>
+<tr><td>**DATETIME**</td><td>Si</td><td>Fecha y Hora de la Transacción</td><td>Fecha y Hora. aaaammddTHHMMSSZ La hora se expresa en formato 24 hs.</td><td>Ejemplo: "2017-07-28T15:54:14Z"</td></tr>
 <tr><td>**RESULTCODE**</td><td>Si</td><td>Código de estado o valor de retorno del Servicio</td><td>Numérico de 5 posiciones</td><td> <b>-1 -> OK<br> 0 a 99999 o vacío -> error</b></td></tr>
-<tr><td>**RESULTMESSAGE**</td><td>Si</td><td>Descripción del código de retorno o estado del servicio</td><td>Alfanumérico hasta 256</td><td>-</td></tr>
-<tr><td>**CURRENCYNAME**</td><td>No</td><td>Nombre de la Moneda</td><td> 'Pesos'</td><td> </td></tr>
-<tr><td>**PAYMENTMETHODNAME**</td><td>Sí </td><td>Medio de pago usado para la operación</td><td>'VISA'</td><td></td></tr>
-<tr><td>**TICKETNUMBER** </td><td>No</td><td>Número de Ticket o Voucher</td><td>Numérico de Hasta 4 dígitos</td><td></td></tr>
-<tr><td>**CARDNUMBERVISIBLE**</td><td>No</td><td>Número de Tarjeta, enmascarado según normativas nacionales, regionales o globales</td><td></td><td></td></tr>
-<tr><td>**AUTHORIZATIONCODE**</td><td>No</td><td>Código de Autorización</td><td>Alfanumérico de hasta 8 caracteres</td><td></td></tr>
+<tr><td>**RESULTMESSAGE**</td><td>Si</td><td>Descripción del código de retorno o estado del servicio</td><td>Alfanumérico hasta 256</td><td>Ejemplo: "APROBADA"</td></tr>
+<tr><td>**CURRENCYNAME**</td><td>No</td><td>Nombre de la Moneda</td><td>Alfanumérico</td><td>Ejemplo: "Peso Argentino"</td></tr>
+<tr><td>**PAYMENTMETHODNAME**</td><td>Sí </td><td>Medio de pago usado para la operación</td><td>Alfanumérico</td><td>Ejemplo: "VISA"</td></tr>
+<tr><td>**TICKETNUMBER** </td><td>No</td><td>Número de Ticket o Voucher</td><td>Numérico de Hasta 4 dígitos</td><td>Ejemplo: 7057</td></tr>
+<tr><td>**CARDNUMBERVISIBLE**</td><td>No</td><td>Número de Tarjeta, enmascarado según normativas nacionales, regionales o globales</td><td></td><td>Ejemplo: "450799XXXXXX0010"</td></tr>
+<tr><td>**AUTHORIZATIONCODE**</td><td>No</td><td>Código de Autorización</td><td>Alfanumérico de hasta 8 caracteres</td><td>Ejemplo: "014158"</td></tr>
 <tr><td>**INSTALLMENTPAYMENTS**</td><td>No</td><td>Cantidad de cuotas elegidas para la operación</td><td>Numérico</td><td> Ejemplo: 03</td></tr>
 <tr><td>**AMOUNTBUYER**</td><td>Si</td><td>Monto final (incluyendo Costo Financiero) pagado por el comprador</td><td>Decimal</td><td> Ejemplo: 129.68</td></tr>
 </table>
@@ -850,6 +904,9 @@ También disponemos de un ejemplo más completo que simula una orden en un e-com
 
 <a name="status"></a>
 #### Status de la Operación
+
+![estado](https://raw.githubusercontent.com/TodoPago/imagenes/master/README.img/secuencia-status.jpg)
+
 El SDK cuenta con un método para consultar el status de la transacción de forma on-line, con los siguientes datos:
 
 <table>
@@ -897,14 +954,14 @@ El siguiente método retornará el status actual de la transacción en Todopago.
   <td>Sí</td>
   <td>Número identificador del estado en el que se encuentra la transacción</td>
   <td>Numérico</td>
-  <td></td>
+  <td>Ejemplo: -1</td>
   </tr>
   <tr>
   <td><b>RESULTMESSAGE</b></td>
   <td>Sí</td>
   <td>Describe el estado en el que se encuentra la transacción</td>
   <td>Alfanumérico</td>
-  <td></td>
+  <td>Ejemplo: "APROBADA"</td>
   </tr>
   <tr>
     <td><b>DATETIME</b></td>
@@ -976,28 +1033,28 @@ Usando el punto como separador de decimales. No se permiten comas, ni como separ
     <td>No</td>
     <td>Número de documento</td>
     <td>Numérico</td>
-    <td></td>
+    <td>Ejemplo: 1987234</td>
   </tr>
   <tr>
     <td><b>CARDNUMBER</b></td>
     <td>No</td>
     <td>Número de Tarjeta, enmascarado según normativas nacionales</td>
     <td>alfanumérico de 20 caracteres</td>
-    <td></td>
+    <td>Ejemplo: "450799XXXXXX0010"</td>
   </tr>
   <tr>
   <td><b>TITULAR</b></td>
   <td>No</td>
   <td>Nombre del titular de la tarjeta.</td>
   <td>Alfanumérico</td>
-  <td></td>
+  <td>Ejemplo: "Juan Pérez"</td>
   </tr>
   <tr>
     <td><b>NROTICKET</b></td>
     <td>No</td>
     <td>Número de Ticket o Voucher</td>
     <td>Numérico de Hasta 4 dígitos</td>
-    <td></td>
+    <td>Ejemplo: 7509</td>
   </tr>
 </table>
 
@@ -1040,7 +1097,7 @@ Campo      | Requerido  | Descripción                                 | Tipo de
 MERCHANT   | Sí         | Nro identificador del comercio              | numérico     | 12305
 STARTDATE  | Sí         | Fecha y hora desde                          | date         | date("Y-m-d", time()-60*60*24*30)
 ENDDATE    | Sí         | Fecha y hora hasta                          | date         | date("Y-m-d", time())
-PAGENUMBER | Sí         | Número de página a la que se desea acceder* | entero       |
+PAGENUMBER | Sí         | Número de página a la que se desea acceder* | entero       | 2
 
 _* Este método devuelve páginas de 5 transacciones, por medio del campo **PAGENUMBER** se puede indicar a que página se desea acceder._
 
@@ -1055,8 +1112,22 @@ $client->getByRangeDateTime(array('MERCHANT'=>'12305', "STARTDATE" => $date1, "E
 ```
 La respuesta será similar al [GetStatus](#status), pero con hasta 5 operaciones.
 
+<a name="discover"></a>
+#### Descubrimiento de Medios de Pago
+
+![medios de pago](https://raw.githubusercontent.com/TodoPago/imagenes/master/README.img/secuencia-paymentmethods.jpg)
+
+La SDK cuenta con un método para obtener todos los medios de pago habilitados en TodoPago.
+
+```php
+$client = new TodoPago\Sdk($http_header, $mode);
+$rta = $client->discoverPaymentMethods();
+```
+
 <a name="devolucion"></a>
 #### Devolución
+
+![devolucion parcial](https://raw.githubusercontent.com/TodoPago/imagenes/master/README.img/secuencia-devolucion-total.jpg)
 
 El SDK dispone de métodos para realizar la devolución, de una transacción realizada a traves de TodoPago.
 
@@ -1109,12 +1180,14 @@ array(
 	"StatusMessage" => "Operación realizada correctamente",
 );
 ```
-<br>
-
 <a name="devolucionparcial"></a>
 #### Devolución parcial
 
+![devolucion parcial](https://raw.githubusercontent.com/TodoPago/imagenes/master/README.img/secuencia-devolucion-parcial.jpg)
+
 El SDK dispone de métodos para realizar la devolución parcial, de una transacción realizada a traves de TodoPago.
+
+_Nota: Para el caso de promociones con costo financiero, se deberá enviar el monto a devolver en base al valor original de la transacción y no del monto finalmente cobrado. TodoPago se encargará de devolver el porcentaje del costo financiero correspondiente a la devolución parcial._
 
 Se debe llamar al método ```returnRequest``` de la siguiente manera:
 
@@ -1288,12 +1361,13 @@ El formulario define callbacks javascript, que son llamados según el estado y l
 
 **Ejemplo de Implementación**:
 <a href="/resources/form_hibrido-ejemplo/index.html" target="blank">Formulario híbrido</a>
-<br>
 
 [<sub>Volver a inicio</sub>](#inicio)
 
 <a name="credenciales"></a>
 #### Obtener credenciales
+![credenciales](https://raw.githubusercontent.com/TodoPago/imagenes/master/README.img/secuencia-credenciales.jpg)
+
 El SDK permite obtener las credenciales "Authentification", "MerchandId" y "Security" de la cuenta de Todo Pago, ingresando el usuario y contraseña.<br>
 Esta funcionalidad es útil para obtener los parámetros de configuración dentro de la implementación.
 
@@ -1376,7 +1450,7 @@ $rta->getApikey();
 
 <table>
 <tr><th>Id mensaje</th><th>Mensaje</th></tr>
-<tr><td>-1</td><td>Aprobada.</td></tr>
+<tr><td>-1</td><td>Tu compra fue exitosa.</td></tr>
 <tr><td>1081</td><td>Tu saldo es insuficiente para realizar la transacción.</td></tr>
 <tr><td>1100</td><td>El monto ingresado es menor al mínimo permitido</td></tr>
 <tr><td>1101</td><td>El monto ingresado supera el máximo permitido.</td></tr>
@@ -1396,16 +1470,21 @@ $rta->getApikey();
 <tr><td>90000</td><td>La cuenta destino de los fondos es inválida. Verificá la información ingresada en Mi Perfil.</td></tr>
 <tr><td>90001</td><td>La cuenta ingresada no pertenece al CUIT/ CUIL registrado.</td></tr>
 <tr><td>90002</td><td>No pudimos validar tu CUIT/CUIL.  Comunicate con nosotros <a href="#contacto" target="_blank">acá</a> para más información.</td></tr>
+<tr><td>99005</td><td>Tu compra no pudo realizarse. Iniciala nuevamente.</td></tr>
 <tr><td>99900</td><td>El pago fue realizado exitosamente</td></tr>
 <tr><td>99901</td><td>No hemos encontrado tarjetas vinculadas a tu Billetera. Podés  adherir medios de pago desde www.todopago.com.ar</td></tr>
 <tr><td>99902</td><td>No se encontro el medio de pago seleccionado</td></tr>
 <tr><td>99903</td><td>Lo sentimos, hubo un error al procesar la operación. Por favor reintentá más tarde.</td></tr>
+<tr><td>99904</td><td>Tu compra no puede ser realizada. Comunicate con tu vendedor.</td></tr>
+<tr><td>99953</td><td>Tu compra no pudo realizarse. Iniciala nuevamente o utilizá otro medio de pago.</td></tr>
+<tr><td>99960</td><td>Esta compra requiere autorización de VISA. Comunicate al número que se encuentra al dorso de tu tarjeta.</td></tr>
+<tr><td>99961</td><td>Esta compra requiere autorización de AMEX. Comunicate al número que se encuentra al dorso de tu tarjeta.</td></tr>
 <tr><td>99970</td><td>Lo sentimos, no pudimos procesar la operación. Por favor reintentá más tarde.</td></tr>
 <tr><td>99971</td><td>Lo sentimos, no pudimos procesar la operación. Por favor reintentá más tarde.</td></tr>
 <tr><td>99978</td><td>Lo sentimos, no pudimos procesar la operación. Por favor reintentá más tarde.</td></tr>
 <tr><td>99979</td><td>Lo sentimos, el pago no pudo ser procesado.</td></tr>
 <tr><td>99980</td><td>Ya realizaste un pago en este sitio por el mismo importe. Si querés realizarlo nuevamente esperá 5 minutos.</td></tr>
-<tr><td>99982</td><td>En este momento la operación no puede ser realizada. Por favor intentá más tarde.</td></tr>
+<tr><td>99982</td><td>Tu compra no pudo ser procesada. Iniciala nuevamente utilizando otro medio de pago.</td></tr>
 <tr><td>99983</td><td>Lo sentimos, el medio de pago no permite la cantidad de cuotas ingresadas. Por favor intentá más tarde.</td></tr>
 <tr><td>99984</td><td>Lo sentimos, el medio de pago seleccionado no opera en cuotas.</td></tr>
 <tr><td>99985</td><td>Lo sentimos, el pago no pudo ser procesado.</td></tr>
@@ -1417,7 +1496,7 @@ $rta->getApikey();
 <tr><td>99991</td><td>Los datos informados son incorrectos. Por favor ingresalos nuevamente.</td></tr>
 <tr><td>99992</td><td>La fecha de vencimiento es incorrecta. Por favor seleccioná otro medio de pago o actualizá los datos.</td></tr>
 <tr><td>99993</td><td>La tarjeta ingresada no está vigente. Por favor seleccioná otra tarjeta o actualizá los datos.</td></tr>
-<tr><td>99994</td><td>El saldo de tu tarjeta no te permite realizar esta operacion.</td></tr>
+<tr><td>99994</td><td>El saldo de tu tarjeta no te permite realizar esta compra. Iniciala nuevamente utilizando otro medio de pago.</td></tr>
 <tr><td>99995</td><td>La tarjeta ingresada es invalida. Seleccioná otra tarjeta para realizar el pago.</td></tr>
 <tr><td>99996</td><td>La operación fué rechazada por el medio de pago porque el monto ingresado es inválido.</td></tr>
 <tr><td>99997</td><td>Lo sentimos, en este momento la operación no puede ser realizada. Por favor intentá más tarde.</td></tr>
