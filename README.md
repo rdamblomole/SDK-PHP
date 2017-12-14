@@ -1252,8 +1252,8 @@ Con el mismo, se busca que el comercio pueda adecuar el look and feel del formul
 **Librería**<br>
 El formulario requiere incluir en la página una librería Javascript de TodoPago.<br>
 El endpoint depende del entorno:
-+ Desarrollo: https://developers.todopago.com.ar/resources/TPHybridForm-v0.1.js
-+ Produccion: https://forms.todopago.com.ar/resources/TPHybridForm-v0.1.js
++ Desarrollo: https://developers.todopago.com.ar/resources/TPBSAForm.min.js
++ Produccion: https://forms.todopago.com.ar/resources/TPBSAForm.min.js
 
 También se provee un método en el SDK para obtener el endpoint de la librería Javascript:
 

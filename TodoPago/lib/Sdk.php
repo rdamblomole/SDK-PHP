@@ -3,14 +3,14 @@ namespace TodoPago;
 
 require_once(dirname(__FILE__)."/Client.php");
 
-define('TODOPAGO_VERSION','1.10.0');
+define('TODOPAGO_VERSION','1.10.2');
 define('TODOPAGO_ENDPOINT_TEST','https://developers.todopago.com.ar/');
 define('TODOPAGO_ENDPOINT_PROD','https://apis.todopago.com.ar/');
 define('TODOPAGO_ENDPOINT_TENATN', 't/1.1/');
 define('TODOPAGO_ENDPOINT_SOAP_APPEND', 'services/');
 
-define('TODOPAGO_ENDPOINT_TEST_FORM','https://developers.todopago.com.ar/resources/TPHybridForm-v0.1.js');
-define('TODOPAGO_ENDPOINT_PROD_FORM','https://forms.todopago.com.ar/resources/TPHybridForm-v0.1.js');
+define('TODOPAGO_ENDPOINT_TEST_FORM','https://developers.todopago.com.ar/resources/TPBSAForm.min.js');
+define('TODOPAGO_ENDPOINT_PROD_FORM','https://forms.todopago.com.ar/resources/TPBSAForm.min.js');
 
 define('TODOPAGO_WSDL_AUTHORIZE', dirname(__FILE__).'/Authorize.wsdl');
 
