@@ -848,6 +848,8 @@ El campo o elemento Payload es utilizado para retornar los datos de la respuesta
 <tr><td>**AUTHORIZATIONCODE**</td><td>No</td><td>Código de Autorización</td><td>Alfanumérico de hasta 8 caracteres</td><td>Ejemplo: "014158"</td></tr>
 <tr><td>**INSTALLMENTPAYMENTS**</td><td>No</td><td>Cantidad de cuotas elegidas para la operación</td><td>Numérico</td><td> Ejemplo: 03</td></tr>
 <tr><td>**AMOUNTBUYER**</td><td>Si</td><td>Monto final (incluyendo Costo Financiero) pagado por el comprador</td><td>Decimal</td><td> Ejemplo: 129.68</td></tr>
+<tr><td>**CFT**</td><td>Si</td><td>CFT de la promoción aplicada.</td><td>Decimal</td><td> Ejemplo: 0.00</td></tr>
+<tr><td>**TEA**</td><td>Si</td><td>TEA de la promoción aplicada.</td><td>Decimal</td><td> Ejemplo: 22.00</td></tr>
 </table>
 
 .
@@ -872,7 +874,9 @@ array(
           'TICKETNUMBER'           => '12',
           'CARDNUMBERVISIBLE'      => '450799******4905',
           'AUTHORIZATIONCODE'      => 'TEST38',
-	  'INSTALLMENTPAYMENTS'    => '5'
+	  'INSTALLMENTPAYMENTS'    => '5',
+          'CFT'                    => '0.00',
+          'TEA'                    => '22.00'	  
       ),
       'Request' =>
         array (
