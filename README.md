@@ -237,7 +237,6 @@ __*__ _Importante:_ Tambíen deben mandarse los datos correspondientes a [Preven
 <tr><td>**RequestKey**</td><td>No</td><td>Identificador Privado del Requerimiento obtenido en la respuesta de la operación SendAuthorizeRequest. Nunca debe ser expuesto hacia el Web Browser. Solo será utilizado entre el ecommerce y TodoPago</td><td>Alfanumérico hasta 48 caracteres</td><td>8496472a-8c87-e35b-dcf2-94d5e31eb12f</td></tr>
 <tr><td>**PublicRequestKey**</td><td>No</td><td>Identificador Público del Requerimiento obenido en la respuesta de la operación SendAuthorizeRequest</td><td>Alfanumérico de hasta 48 caracteres</td><td>t7d3938c9-f7b1-4ee9-e76b-9cc84f73fe81</td></tr>
 </table>
-.
 
 
 **Ejemplo de respuesta**
@@ -1418,7 +1417,7 @@ $rta->getApikey();
 ## Tablas de Referencia
 ###### [Provincias](#p)
 
-<p>Solo utilizado para incluir los datos de control de fraude</p>
+<p>Los siguientes códigos son utilizados para control de fraude y para el cálculo de retenciones del Impuesto sobre los Ingresos Brutos.</p>
 <table>
 <tr><th>Provincia</th><th>Código</th></tr>
 <tr><td>CABA</td><td>C</td></tr>
