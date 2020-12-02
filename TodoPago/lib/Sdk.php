@@ -4,7 +4,7 @@ namespace TodoPago;
 require_once(dirname(__FILE__)."/Client.php");
 
 define('TODOPAGO_VERSION','1.10.2');
-define('TODOPAGO_ENDPOINT_TEST','https://developers.todopago.com.ar/');
+define('TODOPAGO_ENDPOINT_TEST','https://apis.developers.todopago.com.ar/');
 define('TODOPAGO_ENDPOINT_PROD','https://apis.todopago.com.ar/');
 define('TODOPAGO_ENDPOINT_TENATN', 't/1.1/');
 define('TODOPAGO_ENDPOINT_SOAP_APPEND', 'services/');
