@@ -1,8 +1,10 @@
 {
-    "name": "todopago/php-sdk",
+    "name": "rdamblomole/php-sdk",
     "description": "SDK para TodoPago",
+    "version": "1.10.15",
     "require": {
-        "php": ">=5.3"
+        "php": ">=5.3",
+        "magento/framework": "*"
     },
     "autoload": {
         "psr-4": {
@@ -12,11 +14,12 @@
     },
     "repositories": [
         {
-             "type": "composer",
-             "url": "https://packagist.org"
+            "type": "composer",
+            "url": "https://repo.magento.com/"
         },
-        { 
-            "packagist": false 
+        {
+            "type": "vcs",
+            "url": "https://github.com/rdamblomole/SDK-PHP.git"
         }
     ],
     "require-dev": {
@@ -24,3 +27,4 @@
         "php-mock/php-mock-phpunit": "^1.1"
     }
 }
+
